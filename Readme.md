@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Polina Milekhina](https://up.htmlacademy.ru/ecmascript/14/user/1247199).
-* Наставник: `Неизвестно`.
+* Наставник: [Семён Якушев](https://htmlacademy.ru/profile/id1118791).
 
 ---
 
