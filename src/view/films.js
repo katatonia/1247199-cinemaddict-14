@@ -185,4 +185,3 @@ const createFilmsList = () => {
 };
 
 export { createFilmsList };
-

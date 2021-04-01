@@ -15,4 +15,3 @@ const main = document.querySelector('.main');
 render(main, 'beforeend', createMenuTemplate());
 render(main, 'beforeend', createSortTemplate());
 render(main, 'beforeend', createFilmsList());
-
