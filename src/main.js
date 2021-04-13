@@ -18,4 +18,12 @@ render(main, 'beforeend', createFilmsList());
 const films = main.querySelector('.films');
 render(films, 'beforeend', createCardRate());
 
-console.log(generateFilmCard());
+const generateMocks = () => {
+  const mocksArray = [];
+  for (let i = 0; i < 20; i++) {
+    mocksArray.push(generateFilmCard());
+  }
+  return mocksArray;
+};
+
+console.log(generateMocks());

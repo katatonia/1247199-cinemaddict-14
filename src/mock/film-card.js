@@ -42,7 +42,7 @@ const getNewArray = (array, count) => {
 };
 
 const getArrayItem = (array) => {
-  const randomItem = getRandomInteger(1, array.length);
+  const randomItem = getRandomInteger(1, array.length - 1);
   return array[randomItem];
 };
 
@@ -56,14 +56,14 @@ const generateDescription = () => {
 const generateWritersList = () => {
   const writers = ['Anne Wigton', 'Heinz Herald', 'Richard Weil'];
   const writersList = shuffle(writers);
-  const randomWriters = getRandomInteger(1, writers.length);
+  const randomWriters = getRandomInteger(0, writers.length);
   return getNewArray(writersList, randomWriters);
 };
 
 const generateActorsList = () => {
   const actors = ['Erich von Stroheim', 'Mary Beth Hughes', 'Dan Duryea'];
   const actorsList = shuffle(actors);
-  const randomActors = getRandomInteger(1, actors.length);
+  const randomActors = getRandomInteger(0, actors.length);
   return getNewArray(actorsList, randomActors);
 };
 
@@ -79,14 +79,14 @@ const getDate = () => {
 const generateCountry = () => {
   const countries = ['USA', 'Canada', 'Germany', 'France'];
   const countriesList = shuffle(countries);
-  const randomCountries = getRandomInteger(1, countriesList);
+  const randomCountries = getRandomInteger(0, countriesList.lenght);
   return getNewArray(countriesList, randomCountries);
 };
 
 const generateGenres = () => {
   const genres = ['Drama', 'Film-Noir', 'Mystery'];
   const genresList = shuffle(genres);
-  const randomGenres = getRandomInteger(1, genresList);
+  const randomGenres = getRandomInteger(0, genresList.length);
   return getNewArray(genresList, randomGenres);
 };
 
