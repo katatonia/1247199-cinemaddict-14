@@ -1,6 +1,8 @@
+import nanoid from 'nanoid';
+
 const posters = ['made-for-each-other.png', 'popeye-meets-sinbad.png', 'sagebrush-trail.jpg', 'santa-claus-conquers-the-martians.jpg', 'the-dance-of-life.jpg', 'the-great-flamarion.jpg', 'the-man-with-the-golden-arm.jpg'];
 const titles = ['Made For Each Other', 'Popeye Meets Sinbad', 'Sagebrush Trail', 'Santa Claus Conquers The Martians', 'The Dance Of Life', 'The Great Flamarion', 'The Man With The Golden Arm'];
-//const titlesOriginal = ['Original: The Great Flamarion'];\
+const titleOriginals = ['Made For Each Other', 'Popeye Meets Sinbad', 'Sagebrush Trail', 'Santa Claus Conquers The Martians', 'The Dance Of Life', 'The Great Flamarion', 'The Man With The Golden Arm'];
 const directors = ['Anthony Mann', 'Anne Wigton', 'Heinz Herald', 'Richard Weil'];
 const commentEmotions = ['smile', 'sleeping', 'puke', 'angry'];
 const commentTexts = ['Interesting setting and a good cast', 'Booooooooooring', 'Very very old. Meh', 'Almost two hours? Seriously?'];
@@ -90,27 +92,30 @@ const generateGenres = () => {
   return getNewArray(genresList, randomGenres);
 };
 
-const generateFilmsComment = () => {
-  return {
-    //id: ,
-    text: getArrayItem(commentTexts),
-    emotion: getArrayItem(commentEmotions),
-    author: getArrayItem(commentAuthors),
-    date: getDate(),
-  };
+const generateComments = () => {
+  const commentsArray = [];
+  for (let i = 0; i <= 50; i++) {
+    const comment = {
+      id: nanoid(),
+      text: getArrayItem(commentTexts),
+      emotion: getArrayItem(commentEmotions),
+      author: getArrayItem(commentAuthors),
+      date: getDate(),
+    };
+    commentsArray.push(comment);
+  }
+  return commentsArray;
 };
 
-const generateFilmsComments = (count) => {
-  return new Array(count).fill('').map(generateFilmsComment);
-};
+const allComments = generateComments();
 
 const generateFilmCard = () => {
   return {
     filmInfo: {
-      //id: 1,
+      id: nanoid(),
       poster: getArrayItem(posters),
       title: getArrayItem(titles),
-      //titleOriginal: 'Original: The Great Flamarion',
+      titleOriginal: getArrayItem(titleOriginals),
       age: getRandomInteger(0, 18) + '+',
       rate: getRandomInteger(10, 100)/10,
       director: getArrayItem(directors),
@@ -126,7 +131,7 @@ const generateFilmCard = () => {
       },
       genres: generateGenres(),
       description: generateDescription(),
-      comments: generateFilmsComments(getRandomInteger(0, 6)),
+      comments: shuffle(allComments).slice(0, getRandomInteger(0, 5)),
     },
     userControls: {
       isWatchlist: Math.random() < 0.5,
@@ -137,4 +142,6 @@ const generateFilmCard = () => {
   };
 };
 
-export { generateFilmCard };
+const card = generateFilmCard();
+
+export { generateFilmCard, card };

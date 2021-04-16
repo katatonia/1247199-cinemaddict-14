@@ -1,11 +1,12 @@
-const createFilmsList = () => {
+const createFilmsList = (card) => {
+  const title = card.filmInfo.title;
   return `  <section class="films">
   <section class="films-list">
     <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
 
     <div class="films-list__container">
       <article class="film-card">
-        <h3 class="film-card__title">The Dance of Life</h3>
+        <h3 class="film-card__title">${title}</h3>
         <p class="film-card__rating">8.3</p>
         <p class="film-card__info">
           <span class="film-card__year">1929</span>
