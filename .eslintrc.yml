@@ -6,4 +6,7 @@ env:
   es2017: true
   browser: true
 
+rules:
+  no-unused-vars: 'warn'
+
 extends: 'htmlacademy/vanilla'
