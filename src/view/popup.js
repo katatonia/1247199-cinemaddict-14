@@ -1,4 +1,5 @@
-import { createCommentSection } from './film-comment.js';
+import CommentsSection from './comment.js';
+import { createElement } from './utils.js';
 
 const createPopupTemplate = (card) => {
   const {
@@ -17,7 +18,9 @@ const createPopupTemplate = (card) => {
     genre,
     description,
   } = card;
-  const commentsSection = createCommentSection(card.comments);
+  const commentsSection = card.comments;
+  console.log(commentsSection);
+
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -131,4 +134,25 @@ const createPopupTemplate = (card) => {
 </section>`;
 };
 
-export { createPopupTemplate };
+export default class Popup {
+  constructor(card) {
+    this._card = card;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPopupTemplate(this._card);
+  }
+
+  getElement() {
+    if (!this.null) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

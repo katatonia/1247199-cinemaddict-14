@@ -1,3 +1,35 @@
+const renderTemplate = (container, place, template) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+const Headers = {
+  MOST_COMMENTED: 'Most commented',
+  TOP_RATED: 'Top rated',
+};
+
+const renderElement = (container, place, element) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
+const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
 const getDate = () => {
   const date = new Date();
 
@@ -43,4 +75,4 @@ const getNewArray = (array, count) => {
   return newArray;
 };
 
-export { getDate, getArrayItem, getRandomInteger, shuffle, getNewArray };
+export { renderTemplate, RenderPosition, Headers, renderElement, createElement, getDate, getArrayItem, getRandomInteger, shuffle, getNewArray };
