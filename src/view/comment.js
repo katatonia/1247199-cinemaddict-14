@@ -18,7 +18,7 @@ const generateFilmComment = (comment) => {
 };
 
 const createCommentSection = (comments) => {
-  let commentsSection = `<h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+  let commentsSection = `<div><h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
   <ul class="film-details__comments-list">`;
 
   if (comments.length > 0) {
@@ -26,7 +26,7 @@ const createCommentSection = (comments) => {
       commentsSection += generateFilmComment(comment);
     });
   }
-  commentsSection += '</ul>';
+  commentsSection += '</ul></div>';
   return commentsSection;
 };
 

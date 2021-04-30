@@ -1,4 +1,3 @@
-import CommentsSection from './comment.js';
 import { createElement } from './utils.js';
 
 const createPopupTemplate = (card) => {
@@ -18,9 +17,6 @@ const createPopupTemplate = (card) => {
     genre,
     description,
   } = card;
-  const commentsSection = card.comments;
-  console.log(commentsSection);
-
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -98,7 +94,6 @@ const createPopupTemplate = (card) => {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-      ${commentsSection}
       <div class="film-details__new-comment">
       <div class="film-details__add-emoji-label"></div>
 

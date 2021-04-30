@@ -1,5 +1,6 @@
-const renderTemplate = (container, place, template) => {
-  container.insertAdjacentHTML(place, template);
+const HeadersExtra = {
+  MOST_COMMENTED: 'Most commented',
+  TOP_RATED: 'Top rated',
 };
 
 const RenderPosition = {
@@ -7,12 +8,7 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
-const Headers = {
-  MOST_COMMENTED: 'Most commented',
-  TOP_RATED: 'Top rated',
-};
-
-const renderElement = (container, place, element) => {
+const render = (container, place, element) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -75,4 +71,4 @@ const getNewArray = (array, count) => {
   return newArray;
 };
 
-export { renderTemplate, RenderPosition, Headers, renderElement, createElement, getDate, getArrayItem, getRandomInteger, shuffle, getNewArray };
+export { RenderPosition, HeadersExtra, render, createElement, getDate, getArrayItem, getRandomInteger, shuffle, getNewArray };
