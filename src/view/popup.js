@@ -18,7 +18,7 @@ const createPopupTemplate = (card) => {
     description,
   } = card;
 
-  return `<section class="film-details">
+  return `<section class="film-details" style="z-index: 2">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
       <div class="film-details__close">
@@ -140,7 +140,7 @@ export default class Popup {
   }
 
   getElement() {
-    if (!this.null) {
+    if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
 

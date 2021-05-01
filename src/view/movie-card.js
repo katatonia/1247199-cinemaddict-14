@@ -33,7 +33,7 @@ export default class MovieCard {
   }
 
   getElement() {
-    if (!this.null) {
+    if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
 
