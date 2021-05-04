@@ -1,20 +1,20 @@
 import { createElement } from './utils.js';
 
-const createShowMoreButton = () => {
-  return '<button class="films-list__show-more">Show more</button>';
+const createListEmptyTemplate = () => {
+  return '<h2 class="films-list__title">There are no movies in our database</h2>';
 };
 
-export default class ShowMore {
+export default class ListEmpty {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButton();
+    return createListEmptyTemplate();
   }
 
   getElement() {
-    if (!this.null) {
+    if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
 
@@ -25,3 +25,4 @@ export default class ShowMore {
     this._element = null;
   }
 }
+
