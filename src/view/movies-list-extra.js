@@ -1,4 +1,4 @@
-import { createElement, HeadersExtra } from './utils.js';
+import { createElement } from './utils.js';
 
 const createMoviesListExtra = (header) => {
   return `<section class="films-list films-list--extra">
