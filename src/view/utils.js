@@ -1,3 +1,13 @@
+const comparer = (a, b) => {
+  if (a < b) {
+    return 1;
+  } else if (a > b) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
 const HeadersExtra = {
   MOST_COMMENTED: 'Most commented',
   TOP_RATED: 'Top rated',
@@ -71,4 +81,4 @@ const getNewArray = (array, count) => {
   return newArray;
 };
 
-export { RenderPosition, HeadersExtra, render, createElement, getDate, getArrayItem, getRandomInteger, shuffle, getNewArray };
+export { RenderPosition, HeadersExtra, render, createElement, getDate, getArrayItem, getRandomInteger, shuffle, getNewArray, comparer };
