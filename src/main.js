@@ -7,7 +7,7 @@ import { generateFilmCard } from './mock/generate-card.js';
 import Popup from './view/popup.js';
 import ShowMore from './view/show-more-button.js';
 import FooterStatistic from './view/footer-statistic.js';
-import { render, RenderPosition, HeadersExtra, comparer } from './view/utils.js';
+import { render, RenderPosition, HeadersExtra } from './view/utils/render.js';
 import MovieCard from './view/movie-card.js';
 import CommentsSection from './view/comment.js';
 import ListEmpty from './view/list-empty.js';
@@ -22,19 +22,19 @@ const favoriteMovies = cards.filter((card) => card.isFavorite);
 const favoriteMoviesCount = favoriteMovies.length;
 
 const header = document.querySelector('.header');
-render(header, RenderPosition.BEFOREEND, new User(watchedMoviesCount).getElement());
+render(header, RenderPosition.BEFOREEND, new User(watchedMoviesCount));
 
 const main = document.querySelector('.main');
-render(main, RenderPosition.BEFOREEND, new MenuTemplate(watchedMoviesCount, watchlistMoviesCount, favoriteMoviesCount).getElement());
+render(main, RenderPosition.BEFOREEND, new MenuTemplate(watchedMoviesCount, watchlistMoviesCount, favoriteMoviesCount));
 
-render(main, RenderPosition.BEFOREEND, new Sort().getElement());
+render(main, RenderPosition.BEFOREEND, new Sort());
 render(main, RenderPosition.BEFOREEND, new MoviesList().getElement());
 
 const moviesContainer = document.querySelector('.films');
 const moviesListContainer = document.querySelector('.films-list__container');
 
 if (cards.length === 0) {
-  render(moviesListContainer, RenderPosition.BEFOREEND, new ListEmpty().getElement());
+  render(moviesListContainer, RenderPosition.BEFOREEND, new ListEmpty());
 } else {
   const createPopup = (card, element) => {
     const commentsElement = new CommentsSection(card.comments).getElement();
@@ -48,7 +48,7 @@ if (cards.length === 0) {
       document.querySelector('body').classList.remove('hide-overflow');
     };
 
-    popupElement.querySelector('.film-details__close-btn').addEventListener('click', () => {
+    popup.setClosePopupClickHandler(() => {
       closePopup();
     });
 
@@ -66,7 +66,9 @@ if (cards.length === 0) {
   };
 
   const createMovieCardElement = (card) => {
-    const movieCardElement = new MovieCard(card).getElement();
+    const movieCard = new MovieCard(card);
+    const movieCardElement = movieCard.getElement();
+
     const body = document.querySelector('body');
 
     const handleCloseEvent = () => {
@@ -75,19 +77,11 @@ if (cards.length === 0) {
       movieCardElement.appendChild(popupElement);
     };
 
-    movieCardElement.querySelector('.film-card__poster').addEventListener('click', () => {
+    movieCard.setClickHandler(() => {
       handleCloseEvent();
     });
 
-    movieCardElement.querySelector('.film-card__title').addEventListener('click', () => {
-      handleCloseEvent();
-    });
-
-    movieCardElement.querySelector('.film-card__comments').addEventListener('click', () => {
-      handleCloseEvent();
-    });
-
-    return movieCardElement;
+    return movieCard;
   };
 
   let shownMovieAmount = 0;
@@ -98,10 +92,10 @@ if (cards.length === 0) {
     shownMovieAmount++;
   }
 
-  render(moviesContainer, RenderPosition.BEFOREEND, new ShowMore().getElement());
-  const showMoreButton = document.querySelector('.films-list__show-more');
+  const showMoreButton = new ShowMore();
+  render(moviesContainer, RenderPosition.BEFOREEND, showMoreButton);
 
-  showMoreButton.addEventListener('click', () => {
+  showMoreButton.setClickHandler(() => {
     let addedMovies = 0;
     cards
       .slice(shownMovieAmount, shownMovieAmount + 5)
@@ -120,8 +114,8 @@ if (cards.length === 0) {
   const extraMostCommentedElement = new MoviesListExtra(HeadersExtra.MOST_COMMENTED).getElement();
   render(moviesContainer, RenderPosition.BEFOREEND, extraMostCommentedElement);
 
-  const sortedByRate = cards.slice().sort((a, b) => comparer(a.rate, b.rate));
-  const sortedByComments = cards.slice().sort((a, b) => comparer(a.comments.length, b.comments.length));
+  const sortedByRate = cards.slice().sort((a, b) => (b.rate - a.rate));
+  const sortedByComments = cards.slice().sort((a, b) => (b.comments.length - a.comments.length));
   const fillExtraWithCards = (extraElement, sortedCards) => {
     const container = extraElement.querySelector('.films-list__container');
     for (let j = 0; j < 2; j++) {
@@ -134,5 +128,5 @@ if (cards.length === 0) {
 
   const footerStatisticCount = cards.length;
   const footer = document.querySelector('.footer');
-  render(footer, RenderPosition.BEFOREEND, new FooterStatistic(footerStatisticCount).getElement());
+  render(footer, RenderPosition.BEFOREEND, new FooterStatistic(footerStatisticCount));
 }

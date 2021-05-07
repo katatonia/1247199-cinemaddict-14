@@ -1,4 +1,4 @@
-import { createElement } from './utils.js';
+import AbstractView from './abstract.js';
 
 const calcUserRank = (watchedMoviesCount) => {
   if (!watchedMoviesCount) {
@@ -19,26 +19,14 @@ const createUserTemplate = (watchedMoviesCount) => {
   </section>`;
 };
 
-export default class User {
+export default class User extends AbstractView {
   constructor (watchedMoviesCount) {
+    super();
     this._watchedMoviesCount = watchedMoviesCount;
-    this._element = null;
   }
 
   getTemplate() {
     return createUserTemplate(this._watchedMoviesCount);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 

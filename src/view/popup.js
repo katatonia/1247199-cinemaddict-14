@@ -1,5 +1,5 @@
-import { createElement } from './utils.js';
-import CommentsSection from './comment.js';
+import AbstractView from './abstract.js';
+import { createElement } from './utils/render.js';
 
 const createPopupTemplate = (card) => {
   const {
@@ -99,10 +99,11 @@ const createPopupTemplate = (card) => {
 </section>`;
 };
 
-export default class Popup {
+export default class Popup extends AbstractView {
   constructor(card) {
+    super();
     this._card = card;
-    this._element = null;
+    this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
   }
 
   getTemplate() {
@@ -122,7 +123,14 @@ export default class Popup {
     return this._element;
   }
 
-  removeElement() {
-    this._element = null;
+  _closePopupClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
+  setClosePopupClickHandler(callback) {
+    this._callback.click = callback;
+    const element = this.getElement();
+    element.querySelector('.film-details__close-btn').addEventListener('click', this._closePopupClickHandler);
   }
 }

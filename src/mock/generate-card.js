@@ -1,5 +1,5 @@
 import nanoid from 'nanoid';
-import { getDate, getArrayItem, getRandomInteger, shuffle, getNewArray } from '../view/utils.js';
+import { getDate, getArrayItem, getRandomInteger, shuffle, getNewArray } from '../view/utils/common.js';
 
 const posters = ['made-for-each-other.png', 'popeye-meets-sinbad.png', 'sagebrush-trail.jpg', 'santa-claus-conquers-the-martians.jpg', 'the-dance-of-life.jpg', 'the-great-flamarion.jpg', 'the-man-with-the-golden-arm.jpg'];
 const titles = ['Made For Each Other', 'Popeye Meets Sinbad', 'Sagebrush Trail', 'Santa Claus Conquers The Martians', 'The Dance Of Life', 'The Great Flamarion', 'The Man With The Golden Arm'];
