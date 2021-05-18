@@ -3,7 +3,7 @@ import AbstractView from './abstract.js';
 const createFooterStatistic = (footerStatisticCount) => {
   const stats = footerStatisticCount;
   return `<section class="footer__statistics">
-  <p>${stats}</p>
+  <p>${stats} movies inside</p>
   </section>`;
 };
 

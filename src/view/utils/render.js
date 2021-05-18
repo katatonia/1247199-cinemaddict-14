@@ -10,6 +10,12 @@ const RenderPosition = {
   BEFOREEND: 'beforeend',
 };
 
+/**
+ * Отрисовывает элемент в контейнере.
+ * @param {AbstractView | HTMLElement} container контейнер для отрисовки
+ * @param {'afterbegin' | 'beforeend'} place куда отрисовывается элемент в контейнер
+ * @param {AbstractView | HTMLElement} child элемент для отрисовки
+ */
 const render = (container, place, child) => {
   if (container instanceof AbstractView) {
     container = container.getElement();
