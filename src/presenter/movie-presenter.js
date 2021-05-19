@@ -4,13 +4,23 @@ import CommentsSection from '../view/comment.js';
 import { RenderPosition, render } from '../view/utils/render.js';
 
 export default class MoviePresenter {
-  constructor(container) {
+  constructor(container, handleChangeData) {
     this._container = container;
+    this._changeData = handleChangeData;
+
+    this._handleIsWatchedClick = this._handleIsWatchedClick.bind(this);
+    this._handleAddToWatchlistClick = this._handleAddToWatchlistClick.bind(this);
+    this._handleIsFavoriteClick = this._handleIsFavoriteClick.bind(this);
   }
 
   init(card) {
-    const movieCard = this._createMovieCard(card);
-    render(this._container, RenderPosition.BEFOREEND, movieCard);
+    this._card = card;
+    this._cardComponent = this._createMovieCard(card);
+    render(this._container, RenderPosition.BEFOREEND, this._cardComponent);
+
+    this._cardComponent.setCardMarkAsWatched(this._handleIsWatchedClick);
+    this._cardComponent.setCardAddToWatchlist(this._handleAddToWatchlistClick);
+    this._cardComponent.setCardIsFavorite(() => this._handleIsFavoriteClick(card));
   }
 
   _createMovieCard(card) {
@@ -59,5 +69,41 @@ export default class MoviePresenter {
     document.addEventListener('keydown', handlerOnEscape);
 
     return popup;
+  }
+
+  _handleIsWatchedClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._card,
+        {
+          isWatched: !this._card.isWatched,
+        },
+      ),
+    );
+  }
+
+  _handleAddToWatchlistClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._card,
+        {
+          isWatchlist: !this._card.isWatchlist,
+        },
+      ),
+    );
+  }
+
+  _handleIsFavoriteClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._card,
+        {
+          isFavorite: !this._card.isFavorite,
+        },
+      ),
+    );
   }
 }

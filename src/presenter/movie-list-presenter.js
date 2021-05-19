@@ -5,6 +5,7 @@ import MovieListExtra from '../view/movie-list-extra.js';
 import { render, RenderPosition, HeadersExtra } from '../view/utils/render.js';
 import ListEmpty from '../view/list-empty.js';
 import MoviePresenter from './movie-presenter.js';
+import { updateItem } from '../view/utils/common.js';
 
 const CARDS_ON_LINE = 5;
 
@@ -12,11 +13,12 @@ export default class MovieListPresenter {
   constructor(container) {
     this._container = container;
     this._renderedCardsCount = CARDS_ON_LINE;
+    this._moviePresenters = {};
 
-    this._movieListSection = new MovieList(); // .films > .films-list > .films-list__container
+    this._movieListSection = new MovieList();
     this._movieContainer = this._movieListSection.getElement().querySelector('.films-list__container');
     this._showMoreButton = new ShowMore();
-
+    this._handleDataChange = this._handleDataChange.bind(this);
     this._shownMoviesCount = 0;
   }
 
@@ -39,17 +41,14 @@ export default class MovieListPresenter {
     }
   }
 
-  _addToFavoritesCallback(card) {
-    alert(card);
-  }
-
   _renderSort() {
     render(this._container, RenderPosition.BEFOREEND, new Sort().getElement());
   }
 
   _createMovieCardElement(container, card) {
-    const moviePresenter = new MoviePresenter(container);
-    moviePresenter.init(card, this._addToFavoritesCallback);
+    const moviePresenter = new MoviePresenter(container, this._handleDataChange);
+    moviePresenter.init(card);
+    this._moviePresenters[card.id] = moviePresenter;
   }
 
   _renderMovieList(cards) {
@@ -84,14 +83,19 @@ export default class MovieListPresenter {
     });
   }
 
-  _renderExtra(cards, header, sortFn) {
+  _renderExtra(cards, header) {
     const extraElement = new MovieListExtra(header).getElement();
     render(this._movieListSection, RenderPosition.BEFOREEND, extraElement);
-    const sortedCards = cards.slice().sort(sortFn);
+    const sortedCards = cards.slice().sort();
 
     const movieContainer = extraElement.querySelector('.films-list__container');
     for (let j = 0; j < 2; j++) {
       this._createMovieCardElement(movieContainer, sortedCards[j]);
     }
+  }
+
+  _handleDataChange(updatedCard) {
+    this._cards = updateItem(this._cards, updatedCard);
+    this._moviePresenters[updatedCard.id].init(updatedCard);
   }
 }
