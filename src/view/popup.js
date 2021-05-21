@@ -17,10 +17,10 @@ const createPopupTemplate = (card) => {
     country,
     genre,
     description,
-    comments,
   } = card;
 
-  return `<section class="film-details" style="z-index: 2">
+  //todo: убрать лишний style left: 50%;
+  return `<section class="film-details" style="z-index: 2;">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
       <div class="film-details__close">
@@ -104,6 +104,7 @@ export default class Popup extends AbstractView {
     super();
     this._card = card;
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
+    this._escapePressHandler = this._escapePressHandler.bind(this);
   }
 
   getTemplate() {
@@ -123,13 +124,22 @@ export default class Popup extends AbstractView {
     return this._element;
   }
 
-  _closePopupClickHandler(evt) {
-    evt.preventDefault();
-    this._callback.click();
+  setClosePopupHandler(callback) {
+    this._callback.close = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closePopupClickHandler);
+    document.addEventListener('keydown', this._escapePressHandler);
   }
 
-  setClosePopupClickHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closePopupClickHandler);
+  _closePopupClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.close();
+  }
+
+  _escapePressHandler(evt) {
+    if (evt.code === 'Escape') {
+      evt.preventDefault();
+      this._callback.close();
+      document.removeEventListener('keydown', this._escapePressHandler);
+    }
   }
 }

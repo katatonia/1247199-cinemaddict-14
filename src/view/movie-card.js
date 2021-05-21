@@ -27,7 +27,7 @@ export default class MovieCard extends AbstractView {
     super();
     this._card = card;
 
-    this._closeButtonClickHandler = this._closeButtonClickHandler.bind(this);
+    this._openCardHandler = this._openCardHandler.bind(this);
     this._addToWatchlistClickHandler = this._addToWatchlistClickHandler.bind(this);
     this._markAsWatchedClickHandler = this._markAsWatchedClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
@@ -37,7 +37,7 @@ export default class MovieCard extends AbstractView {
     return createMovieCard(this._card);
   }
 
-  _closeButtonClickHandler(evt) {
+  _openCardHandler(evt) {
     evt.preventDefault();
     this._callback.click();
   }
@@ -57,12 +57,12 @@ export default class MovieCard extends AbstractView {
     this._callback.favoriteClick();
   }
 
-  setClickHandler(callback) {
+  setOpenCardHandler(callback) {
     this._callback.click = callback;
     const element = this.getElement();
-    element.querySelector('.film-card__poster').addEventListener('click', this._closeButtonClickHandler);
-    element.querySelector('.film-card__title').addEventListener('click', this._closeButtonClickHandler);
-    element.querySelector('.film-card__comments').addEventListener('click', this._closeButtonClickHandler);
+    element.querySelector('.film-card__poster').addEventListener('click', this._openCardHandler);
+    element.querySelector('.film-card__title').addEventListener('click', this._openCardHandler);
+    element.querySelector('.film-card__comments').addEventListener('click', this._openCardHandler);
   }
 
   setCardAddToWatchlist(callback) {

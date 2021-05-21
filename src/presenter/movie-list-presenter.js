@@ -6,6 +6,7 @@ import { render, RenderPosition, HeadersExtra } from '../view/utils/render.js';
 import ListEmpty from '../view/list-empty.js';
 import MoviePresenter from './movie-presenter.js';
 import { updateItem } from '../view/utils/common.js';
+//import { SortType } from '../view/const.js';
 
 const CARDS_ON_LINE = 5;
 
@@ -15,17 +16,20 @@ export default class MovieListPresenter {
     this._renderedCardsCount = CARDS_ON_LINE;
     this._moviePresenters = {};
     this._movieExtraPresenters = {};
+    //this._currentSortType = SortType.DEFAULT;
 
     this._movieListSection = new MovieList();
     this._movieContainer = this._movieListSection.getElement().querySelector('.films-list__container');
     this._showMoreButton = new ShowMore();
     this._handleDataChange = this._handleDataChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    //this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._shownMoviesCount = 0;
   }
 
   init(cards) {
     this._cards = cards.slice();
+    this._sourcedCards = cards.slice();
 
     if (cards.length === 0) {
       render(this._container, RenderPosition.BEFOREEND, new ListEmpty().getElement());
@@ -49,13 +53,22 @@ export default class MovieListPresenter {
       .forEach((presenter) => presenter.resetView());
   }
 
+  // _sortCards(sortType) {
+  //   this._currentSortType = sortType;
+  // }
+
+  // _handleSortTypeChange(sortType) {
+  //   if (this._currentSortType === sortType) {
+  //     return;
+  //   }
+
+  //   this._sortCards(sortType);
+  // }
+
   _renderSort() {
     render(this._container, RenderPosition.BEFOREEND, new Sort().getElement());
+    //this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
-
-  //   Object
-  //     .keys(this._moviePresenters)
-  //     .map((key) => {this._moviePresenters[key].closePopup();
 
   _createMovieCardElement(container, card) {
     const moviePresenter = new MoviePresenter(container, this._handleDataChange, this._handleModeChange);
