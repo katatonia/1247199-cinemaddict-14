@@ -5,7 +5,7 @@ import { render, RenderPosition } from './view/utils/render.js';
 import MovieListPresenter from './presenter/movie-list-presenter.js';
 import FooterStatistic from './view/footer-statistic.js';
 
-const CARDS_COUNT = 11;
+const CARDS_COUNT = 10;
 const cards = new Array(CARDS_COUNT).fill().map(generateFilmCard);
 
 const watchedMovies = cards.filter((card) => card.isWatched);

@@ -14,11 +14,13 @@ export default class MovieListPresenter {
     this._container = container;
     this._renderedCardsCount = CARDS_ON_LINE;
     this._moviePresenters = {};
+    this._movieExtraPresenters = {};
 
     this._movieListSection = new MovieList();
     this._movieContainer = this._movieListSection.getElement().querySelector('.films-list__container');
     this._showMoreButton = new ShowMore();
     this._handleDataChange = this._handleDataChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
     this._shownMoviesCount = 0;
   }
 
@@ -41,15 +43,31 @@ export default class MovieListPresenter {
     }
   }
 
+  _handleModeChange() {
+    Object
+      .values(this._moviePresenters)
+      .forEach((presenter) => presenter.resetView());
+  }
+
   _renderSort() {
     render(this._container, RenderPosition.BEFOREEND, new Sort().getElement());
   }
 
+  //   Object
+  //     .keys(this._moviePresenters)
+  //     .map((key) => {this._moviePresenters[key].closePopup();
+
   _createMovieCardElement(container, card) {
-    const moviePresenter = new MoviePresenter(container, this._handleDataChange);
+    const moviePresenter = new MoviePresenter(container, this._handleDataChange, this._handleModeChange);
     moviePresenter.init(card);
     this._moviePresenters[card.id] = moviePresenter;
   }
+
+  // _createMovieCardExtraElement(container, card) {
+  //   const movieExtraPresenter = new MoviePresenter(container, this._handleDataChange);
+  //   movieExtraPresenter.init(card);
+  //   this._movieExtraPresenters[card.id] = movieExtraPresenter;
+  // }
 
   _renderMovieList(cards) {
     for (let i = 0; i < this._renderedCardsCount; i++) {
@@ -97,5 +115,6 @@ export default class MovieListPresenter {
   _handleDataChange(updatedCard) {
     this._cards = updateItem(this._cards, updatedCard);
     this._moviePresenters[updatedCard.id].init(updatedCard);
+    //this._movieExtraPresenters[updatedCard.id].init(updatedCard);
   }
 }
