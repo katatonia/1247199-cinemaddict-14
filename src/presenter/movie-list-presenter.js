@@ -62,11 +62,11 @@ export default class MovieListPresenter {
       case SortType.DEFAULT:
         sortedCards = this._sourcedCards.slice();
         break;
-      case SortType.DATE_DOWN:
+      case SortType.DATE:
         sortedCards = sortedCards.sort((a, b) => b.date - a.date);
         break;
-      case SortType.RATING_DOWN:
-        sortedCards = sortedCards.sort((a, b) => b.rating - a.rating);
+      case SortType.RATE:
+        sortedCards = sortedCards.sort((a, b) => b.rate - a.rate);
         break;
     }
 
