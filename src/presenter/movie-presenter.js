@@ -60,9 +60,6 @@ export default class MoviePresenter {
   destroy() {
     this._cardComponent.getElement().remove();
     this._cardComponent.removeElement();
-
-//    this._popup.getElement().remove();
-  //  this._popup.removeElement();
   }
 
   _closePopup() {
