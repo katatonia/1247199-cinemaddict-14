@@ -17,9 +17,11 @@ const createPopupTemplate = (card) => {
     country,
     genre,
     description,
+    isWatchlist,
+    isWatched,
+    isFavorite,
   } = card;
 
-  //todo: убрать лишний style left: 50%;
   return `<section class="film-details" style="z-index: 2;">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -83,13 +85,13 @@ const createPopupTemplate = (card) => {
       </div>
 
       <section class="film-details__controls">
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${isWatchlist ? 'checked' : ''}>
         <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${isWatched ? 'checked' : ''}>
         <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+        <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${isFavorite ? 'checked' : ''}>
         <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
       </section>
     </div>
@@ -105,6 +107,7 @@ export default class Popup extends AbstractView {
     this._card = card;
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._escapePressHandler = this._escapePressHandler.bind(this);
+    this._addToWatchlistHandler = this._addToWatchlistHandler.bind(this);
   }
 
   getTemplate() {
@@ -128,6 +131,33 @@ export default class Popup extends AbstractView {
     this._callback.close = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._closePopupClickHandler);
     document.addEventListener('keydown', this._escapePressHandler);
+  }
+
+  setAddToWatchlistHandler(callback) {
+    this._callback.addToWatchlist = callback;
+    this.getElement().querySelector('#watchlist').addEventListener('click', this._addToWatchlistHandler);
+  }
+
+  setMarkAsWatchedHandler(callback) {
+    this._callback.isWatched = callback;
+    this.getElement().querySelector('#watched').addEventListener('click', this._isWatchedHandler);
+  }
+
+  setIsFavoriteHandler(callback){
+    this._callback.isFavorite = callback;
+    this.getElement().querySelector('#favorite').addEventListener('click', this._isFavoriteHandler);
+  }
+
+  _addToWatchlistHandler() {
+    this._callback.addToWatchlist();
+  }
+
+  _isWatchedHandler() {
+    this._callback.isWatched();
+  }
+
+  _isFavoriteHandler() {
+    this._callback.isFavorite();
   }
 
   _closePopupClickHandler(evt) {

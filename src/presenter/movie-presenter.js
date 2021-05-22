@@ -8,15 +8,17 @@ const Mode = {
   CLOSE: 'CLOSE',
 };
 export default class MoviePresenter {
-  constructor(container, handleChangeData) {
+  constructor(container, handleChangeData, handleModeChange) {
     this._container = container;
     this._changeData = handleChangeData;
+    this._changeMode = handleModeChange;
     this.Mode = Mode.CLOSE;
     this._bodyContainer = document.querySelector('body');
 
     this._handleIsWatchedClick = this._handleIsWatchedClick.bind(this);
     this._handleAddToWatchlistClick = this._handleAddToWatchlistClick.bind(this);
     this._handleIsFavoriteClick = this._handleIsFavoriteClick.bind(this);
+    this._closePopup = this._closePopup.bind(this);
   }
 
   init(card) {
@@ -29,21 +31,22 @@ export default class MoviePresenter {
       render(this._container, RenderPosition.BEFOREEND, this._cardComponent);
     }
 
-    this._cardComponent.setCardMarkAsWatched(() => this._handleIsWatchedClick(card));
-    this._cardComponent.setCardAddToWatchlist(() => this._handleAddToWatchlistClick(card));
-    this._cardComponent.setCardIsFavorite(() => this._handleIsFavoriteClick(card));
+    this._cardComponent.setCardAddToWatchlist(this._handleAddToWatchlistClick);
+    this._cardComponent.setCardMarkAsWatched(this._handleIsWatchedClick);
+    this._cardComponent.setCardIsFavorite(this._handleIsFavoriteClick);
   }
 
   _createMovieCard(card) {
     const movieCard = new MovieCard(card);
 
     const handleCardClick = () => {
-      this._popup = this._createPopup(card, this._bodyContainer).getElement();
+      this._popup = this._createPopup(card, this._bodyContainer);
       this._bodyContainer.classList.add('hide-overflow');
-      this._bodyContainer.appendChild(this._popup);
+      this._bodyContainer.appendChild(this._popup.getElement(this._commentsElement));
     };
 
     movieCard.setOpenCardHandler(() => {
+      this._changeMode();
       handleCardClick();
     });
 
@@ -51,39 +54,38 @@ export default class MoviePresenter {
   }
 
   resetView() {
-    if (this._mode !== Mode.CLOSE) {
-      this._closePopup();
+    this._closePopup();
+  }
+
+  destroy() {
+    this._cardComponent.getElement().remove();
+    this._cardComponent.removeElement();
+
+//    this._popup.getElement().remove();
+  //  this._popup.removeElement();
+  }
+
+  _closePopup() {
+    if(this._popup) {
+      this._bodyContainer.removeChild(this._popup.getElement(this._commentsElement));
+      this._popup.removeElement();
+      this._popup = null;
+      this._bodyContainer.classList.remove('hide-overflow');
     }
   }
 
-  _createPopup(card, element) {
-    const commentsElement = new CommentsSection(card.comments).getElement();
-    const popup = new Popup(card);
-    const popupElement = popup.getElement(commentsElement);
+  _createPopup(card) {
+    this._commentsElement = new CommentsSection(card.comments).getElement();
+    this._popup = new Popup(card);
+    this._popup.setAddToWatchlistHandler(this._handleAddToWatchlistClick);
+    this._popup.setMarkAsWatchedHandler(this._handleIsWatchedClick);
+    this._popup.setIsFavoriteHandler(this._handleIsFavoriteClick);
 
-    const closePopup = () => {
-      element.removeChild(popupElement);
-      popup.removeElement();
-      this._bodyContainer.classList.remove('hide-overflow');
-    };
-
-    popup.setClosePopupHandler(() => {
-      closePopup();
+    this._popup.setClosePopupHandler(() => {
+      this._closePopup();
     });
 
-    return popup;
-  }
-
-  _handleIsWatchedClick() {
-    this._changeData(
-      Object.assign(
-        {},
-        this._card,
-        {
-          isWatched: !this._card.isWatched,
-        },
-      ),
-    );
+    return this._popup;
   }
 
   _handleAddToWatchlistClick() {
@@ -93,6 +95,18 @@ export default class MoviePresenter {
         this._card,
         {
           isWatchlist: !this._card.isWatchlist,
+        },
+      ),
+    );
+  }
+
+  _handleIsWatchedClick() {
+    this._changeData(
+      Object.assign(
+        {},
+        this._card,
+        {
+          isWatched: !this._card.isWatched,
         },
       ),
     );
