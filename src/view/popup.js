@@ -108,6 +108,8 @@ export default class Popup extends AbstractView {
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._escapePressHandler = this._escapePressHandler.bind(this);
     this._addToWatchlistHandler = this._addToWatchlistHandler.bind(this);
+    this._isWatchedHandler = this._isWatchedHandler.bind(this);
+    this._isFavoriteHandler = this._isFavoriteHandler.bind(this);
   }
 
   getTemplate() {
