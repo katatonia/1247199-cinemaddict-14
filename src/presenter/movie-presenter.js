@@ -1,6 +1,5 @@
 import MovieCard from '../view/movie-card.js';
 import Popup from '../view/popup.js';
-import CommentsSection from '../view/comment.js';
 import { RenderPosition, render, replace } from '../view/utils/render.js';
 
 const Mode = {
@@ -42,7 +41,7 @@ export default class MoviePresenter {
     const handleCardClick = () => {
       this._popup = this._createPopup(card, this._bodyContainer);
       this._bodyContainer.classList.add('hide-overflow');
-      this._bodyContainer.appendChild(this._popup.getElement(this._commentsElement));
+      this._bodyContainer.appendChild(this._popup.getElement());
     };
 
     movieCard.setOpenCardHandler(() => {
@@ -63,8 +62,8 @@ export default class MoviePresenter {
   }
 
   _closePopup() {
-    if(this._popup) {
-      this._bodyContainer.removeChild(this._popup.getElement(this._commentsElement));
+    if (this._popup) {
+      this._bodyContainer.removeChild(this._popup.getElement());
       this._popup.removeElement();
       this._popup = null;
       this._bodyContainer.classList.remove('hide-overflow');
@@ -72,7 +71,6 @@ export default class MoviePresenter {
   }
 
   _createPopup(card) {
-    this._commentsElement = new CommentsSection(card.comments).getElement();
     this._popup = new Popup(card);
     this._popup.setAddToWatchlistHandler(this._handleAddToWatchlistClick);
     this._popup.setMarkAsWatchedHandler(this._handleIsWatchedClick);

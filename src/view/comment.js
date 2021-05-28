@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 
 const generateFilmComment = (comment) => {
-  const {emotionImg, emotion, text, author, date} = comment;
+  const { emotionImg, emotion, text, author, date } = comment;
   return `<li class="film-details__comment">
   <span class="film-details__comment-emoji">
   <img src="/images/emoji/${emotionImg}" width="55" height="55" alt="${emotion}">
@@ -17,7 +17,7 @@ const generateFilmComment = (comment) => {
   </li>`;
 };
 
-const createCommentSection = (comments) => {
+const createCommentSection = (comments, img) => {
   let commentsList = '';
   if (comments.length > 0) {
     comments.forEach((comment) => {
@@ -31,7 +31,7 @@ const createCommentSection = (comments) => {
     ${commentsList}
     </ul>
     <div class="film-details__new-comment">
-      <div class="film-details__add-emoji-label"></div>
+      <div class="film-details__add-emoji-label">${img && img.src ? `<img src="${img.src}" width="55" height="55" alt="${img.alt}">` : ''}</div>
 
       <label class="film-details__comment-label">
         <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -63,12 +63,43 @@ const createCommentSection = (comments) => {
   return commentsSection;
 };
 export default class CommentsSection extends AbstractView {
-  constructor(comments) {
+  constructor(comments, img) {
     super();
     this._comments = comments;
+    this._img = img;
+
+    this._markLabels();
   }
 
   getTemplate() {
-    return createCommentSection(this._comments);
+    return createCommentSection(this._comments, this._img);
+  }
+
+  setImgClickHandler(callback) {
+    this._callback.imgClick = callback;
+    this._addInputHandler('emoji-angry');
+    this._addInputHandler('emoji-puke');
+    this._addInputHandler('emoji-sleeping');
+    this._addInputHandler('emoji-smile');
+  }
+
+  _addInputHandler(id) {
+    const input = this.getElement().querySelector(`#${id}`);
+    input.addEventListener('click', () => {
+      const labelImg = input.label.querySelector('img');
+      this._callback.imgClick(labelImg.src, labelImg.alt);
+    });
+  }
+
+  _markLabels() {
+    const labels = this.getElement().getElementsByTagName('LABEL');
+    for (let i = 0; i < labels.length; i++) {
+      if (labels[i].htmlFor != '') {
+        const elem = this.getElement().querySelector(`#${labels[i].htmlFor}`);
+        if (elem) {
+          elem.label = labels[i];
+        }
+      }
+    }
   }
 }

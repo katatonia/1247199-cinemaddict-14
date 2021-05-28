@@ -1,5 +1,6 @@
 import nanoid from 'nanoid';
 import { getDate, getArrayItem, getRandomInteger, shuffle, getNewArray } from '../view/utils/common.js';
+import dayjs from 'dayjs';
 
 const posters = ['made-for-each-other.png', 'popeye-meets-sinbad.png', 'sagebrush-trail.jpg', 'santa-claus-conquers-the-martians.jpg', 'the-dance-of-life.jpg', 'the-great-flamarion.jpg', 'the-man-with-the-golden-arm.jpg'];
 const titles = ['Made For Each Other', 'Popeye Meets Sinbad', 'Sagebrush Trail', 'Santa Claus Conquers The Martians', 'The Dance Of Life', 'The Great Flamarion', 'The Man With The Golden Arm'];
@@ -52,7 +53,7 @@ const generateComments = () => {
       text: getArrayItem(commentTexts),
       emotion: getArrayItem(commentEmotion),
       author: getArrayItem(commentAuthors),
-      date: getDate(),
+      date: dayjs().format('YYYY/MM/DD HH:mm'),
     };
     comment.emotionImg = comment.emotion + '.png';
     commentsArray.push(comment);
@@ -73,10 +74,9 @@ const generateFilmCard = () => {
     director: getArrayItem(directors),
     writers: generateWritersList(),
     actors: generateActorsList(),
-    date: getDate(),
+    date: dayjs().format('DD MMMM YYYY'),
     country: generateCountry(),
-    hours: getRandomInteger(0, 3) + 'h',
-    minutes: getRandomInteger(0, 59) + 'm',
+    runtime: dayjs().format('HH[h] mm[m]'),
     genre: generateGenres(),
     description: generateDescription(),
     comments: shuffle(allComments).slice(0, getRandomInteger(0, 5)),

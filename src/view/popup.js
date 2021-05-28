@@ -1,5 +1,7 @@
-import AbstractView from './abstract.js';
+import Smart from './smart.js';
 import { createElement } from './utils/render.js';
+import CommentsSection from '../view/comment.js';
+
 
 const createPopupTemplate = (card) => {
   const {
@@ -12,8 +14,7 @@ const createPopupTemplate = (card) => {
     writers,
     actors,
     date,
-    hours,
-    minutes,
+    runtime,
     country,
     genre,
     description,
@@ -66,7 +67,7 @@ const createPopupTemplate = (card) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${hours} ${minutes}</td>
+              <td class="film-details__cell">${runtime}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -101,32 +102,46 @@ const createPopupTemplate = (card) => {
 </section>`;
 };
 
-export default class Popup extends AbstractView {
+export default class Popup extends Smart {
   constructor(card) {
     super();
     this._card = card;
+    this._data = { img: { src: null, alt: null } };
+
     this._closePopupClickHandler = this._closePopupClickHandler.bind(this);
     this._escapePressHandler = this._escapePressHandler.bind(this);
     this._addToWatchlistHandler = this._addToWatchlistHandler.bind(this);
     this._isWatchedHandler = this._isWatchedHandler.bind(this);
     this._isFavoriteHandler = this._isFavoriteHandler.bind(this);
+    this._commentsImgHandler = this._commentsImgHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupTemplate(this._card);
   }
 
-  getElement(bottomElement) {
+  getElement() {
     if (!this._element) {
       this._element = createElement(this.getTemplate());
 
-      if (bottomElement) {
-        const bottomSection = this._element.querySelector('.film-details__bottom-container');
-        bottomSection.appendChild(bottomElement);
-      }
+      const bottomSection = this._element.querySelector('.film-details__bottom-container');
+      const bottom = new CommentsSection(this._card.comments, this._data.img);
+      bottom.setImgClickHandler(this._commentsImgHandler);
+      this._bottomElement = bottom.getElement();
+
+      bottomSection.appendChild(this._bottomElement);
     }
 
     return this._element;
+  }
+
+  _commentsImgHandler(src, alt) {
+    this.updateData({
+      img: {
+        src,
+        alt,
+      },
+    });
   }
 
   setClosePopupHandler(callback) {
@@ -145,7 +160,7 @@ export default class Popup extends AbstractView {
     this.getElement().querySelector('#watched').addEventListener('click', this._isWatchedHandler);
   }
 
-  setIsFavoriteHandler(callback){
+  setIsFavoriteHandler(callback) {
     this._callback.isFavorite = callback;
     this.getElement().querySelector('#favorite').addEventListener('click', this._isFavoriteHandler);
   }
@@ -173,5 +188,12 @@ export default class Popup extends AbstractView {
       this._callback.close();
       document.removeEventListener('keydown', this._escapePressHandler);
     }
+  }
+
+  restoreHandlers() {
+    this.setClosePopupHandler(this._callback.close);
+    this.setAddToWatchlistHandler(this._callback.addToWatchlist);
+    this.setMarkAsWatchedHandler(this._callback.isWatched);
+    this.setIsFavoriteHandler(this._callback.isFavorite);
   }
 }
