@@ -45,6 +45,22 @@ const generateGenres = () => {
   return getNewArray(genresList, randomGenres);
 };
 
+const getDateNum = (num) => {
+  if (num < 10) {
+    return '0' + num;
+  }
+  return '' + num;
+};
+
+const formatDate = (date) => {
+  return `${getDateNum(date.getFullYear())}/${getDateNum(date.getMonth() + 1)}/${getDateNum(date.getDate())}
+  ${getDateNum(date.getHours())}:${getDateNum(date.getMinutes())}`;
+};
+
+const getRandomDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+};
+
 const generateComments = () => {
   const commentsArray = [];
   for (let i = 0; i <= 50; i++) {
@@ -53,7 +69,7 @@ const generateComments = () => {
       text: getArrayItem(commentTexts),
       emotion: getArrayItem(commentEmotion),
       author: getArrayItem(commentAuthors),
-      date: dayjs().format('YYYY/MM/DD HH:mm'),
+      date: formatDate(getRandomDate(new Date(2012, 0, 1), new Date())),
     };
     comment.emotionImg = comment.emotion + '.png';
     commentsArray.push(comment);
@@ -64,6 +80,9 @@ const generateComments = () => {
 const allComments = generateComments();
 
 const generateFilmCard = () => {
+  const randomDate = getRandomDate(new Date(1980, 0, 1), new Date(1990, 0, 1));
+  const date = dayjs(randomDate);
+
   return {
     id: nanoid(),
     poster: './images/posters/' + getArrayItem(posters),
@@ -74,9 +93,10 @@ const generateFilmCard = () => {
     director: getArrayItem(directors),
     writers: generateWritersList(),
     actors: generateActorsList(),
-    date: dayjs().format('DD MMMM YYYY'),
+    date: date.format('DD MMMM YYYY'),
     country: generateCountry(),
-    runtime: dayjs().format('HH[h] mm[m]'),
+    hours: getRandomInteger(1, 3) + 'h',
+    minutes: getRandomInteger(1, 59) + 'm',
     genre: generateGenres(),
     description: generateDescription(),
     comments: shuffle(allComments).slice(0, getRandomInteger(0, 5)),
